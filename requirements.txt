@@ -1,0 +1,18 @@
+# Core LLM providers
+anthropic>=0.40.0
+openai>=1.50.0
+
+# Web and research
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+duckduckgo-search>=6.0.0
+
+# Code analysis
+pylint>=3.0.0
+
+# Testing
+pytest>=8.0.0
+pytest-cov>=4.1.0
+
+# Utilities
+python-dotenv>=1.0.0
