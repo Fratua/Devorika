@@ -8,23 +8,7 @@ from devorika.core.llm_provider import LLMRouter
 from devorika.core.planner import TaskPlanner, TaskStatus
 from devorika.core.memory import Memory
 from devorika.tools.base import ToolRegistry
-from devorika.tools.file_tools import (
-    ReadFileTool, WriteFileTool, EditFileTool,
-    ListDirectoryTool, SearchCodeTool
-)
-from devorika.tools.execution_tools import (
-    BashTool, PythonExecuteTool, InstallPackageTool, RunTestsTool
-)
-from devorika.tools.code_analysis import (
-    AnalyzeCodeTool, FindBugsTool, GetCodeComplexityTool
-)
-from devorika.tools.git_tools import (
-    GitStatusTool, GitDiffTool, GitCommitTool,
-    GitLogTool, GitBranchTool, GitPushTool
-)
-from devorika.tools.web_tools import (
-    WebSearchTool, FetchURLTool, ReadDocumentationTool
-)
+from devorika.tools import register_all_tools, TOOL_CATEGORIES, TOTAL_TOOLS
 
 
 class DevorikaAgent:
@@ -59,37 +43,29 @@ class DevorikaAgent:
         self.conversation_history: List[Dict[str, str]] = []
 
     def _register_tools(self):
-        """Register all available tools."""
-        # File tools
-        self.tool_registry.register(ReadFileTool())
-        self.tool_registry.register(WriteFileTool())
-        self.tool_registry.register(EditFileTool())
-        self.tool_registry.register(ListDirectoryTool())
-        self.tool_registry.register(SearchCodeTool())
+        """
+        Register all available tools.
 
-        # Execution tools
-        self.tool_registry.register(BashTool())
-        self.tool_registry.register(PythonExecuteTool())
-        self.tool_registry.register(InstallPackageTool())
-        self.tool_registry.register(RunTestsTool())
+        Devorika now includes 61 tools across 13 categories:
+        - File Operations (5 tools)
+        - Code Execution (4 tools)
+        - Code Analysis (3 tools)
+        - Git Operations (6 tools)
+        - Web Operations (3 tools)
+        - IDE Integration (6 tools)
+        - Database (5 tools)
+        - DevOps & Cloud (4 tools)
+        - Security (5 tools)
+        - Performance (5 tools)
+        - API Development (4 tools)
+        - ML/AI (6 tools)
+        - Advanced Analysis (5 tools)
+        """
+        # Use centralized tool registration from tools package
+        self.tool_registry = register_all_tools()
 
-        # Code analysis tools
-        self.tool_registry.register(AnalyzeCodeTool())
-        self.tool_registry.register(FindBugsTool())
-        self.tool_registry.register(GetCodeComplexityTool())
-
-        # Git tools
-        self.tool_registry.register(GitStatusTool())
-        self.tool_registry.register(GitDiffTool())
-        self.tool_registry.register(GitCommitTool())
-        self.tool_registry.register(GitLogTool())
-        self.tool_registry.register(GitBranchTool())
-        self.tool_registry.register(GitPushTool())
-
-        # Web tools
-        self.tool_registry.register(WebSearchTool())
-        self.tool_registry.register(FetchURLTool())
-        self.tool_registry.register(ReadDocumentationTool())
+        if self.verbose:
+            print(f"✓ Registered {TOTAL_TOOLS} tools across {len(TOOL_CATEGORIES)} categories")
 
     def execute(self, task: str, max_iterations: int = 20) -> str:
         """
